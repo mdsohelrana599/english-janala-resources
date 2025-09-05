@@ -103,8 +103,28 @@
         <div id="lavel-container" class="flex gap-5 flex-wrap justify-center my-8"></div>
     </section>
 
+
+    <!-- search section -->
+    <section class="flex justify-center mb-10">
+        <div class="join">
+            <div>
+                <label class="input validator join-item">
+                    <input id="input-search" type="text" placeholder="Search Vocabulary Now" required />
+                </label>
+               
+            </div>
+            <button id="btn-search" class="btn btn-primary join-item">Search</button>
+        </div>
+    </section>
+
+    <!-- loading section -->
+    <section id="spinner" class="flex justify-center items-center py-10 hidden">
+        <span class="loading loading-dots loading-lg"></span>
+    </section>
+
+
     <!-- card Section -->
-    <section id="word-Container" class="bg-gray-100 p-10 w-11/12 mx-auto rounded-xl mb-10 grid grid-cols-3 gap-5">
+    <section id="word-Container" class="bg-gray-100 p-10 w-11/12 mx-auto rounded-xl mb-10 grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="text-center col-span-full py-5">
             <p class="font-bangla font-medium text-xl text-gray-500">আপনি এখনো কোন Lesson Select করেন হয়নি</p>
             <h2 class="font-bangla text-4xl font-bold mt-5">একটি Lesson Select করুন।</h2>
@@ -117,7 +137,7 @@
     <dialog id="word_modal" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
             <div id="detsils-container" class="space-y-5">
-                
+
             </div>
             <div class="modal-action">
                 <form method="dialog">

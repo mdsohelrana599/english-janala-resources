@@ -3,6 +3,22 @@ const createElements = (arr) => {
   return htmlElements.join(" ");
 };
 
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
+
+const manageSpinner = (status) => {
+  if (status == true) {
+    document.getElementById("spinner").classList.remove("hidden");
+    document.getElementById("word-Container").classList.add("hidden");
+  } else {
+    document.getElementById("word-Container").classList.remove("hidden");
+    document.getElementById("spinner").classList.add("hidden");
+  }
+};
+
 const loadlessons = () => {
   fetch("https://openapi.programming-hero.com/api/levels/all")
     .then((res) => res.json())
@@ -15,6 +31,7 @@ const removeActive = () => {
 };
 
 const loadaLevelWord = (id) => {
+  manageSpinner(true);
   const url = `https://openapi.programming-hero.com/api/level/${id}`;
   fetch(url)
     .then((res) => res.json())
@@ -37,7 +54,11 @@ const displayWordDetails = (word) => {
   const detailsBox = document.getElementById("detsils-container");
   detailsBox.innerHTML = `
                <div class="">
-                    <h2 class="text-2xl font-bold">${word.word} (<i class="fa-solid fa-microphone-lines"></i> :${word.pronunciation})</h2>
+                    <h2 class="text-2xl font-bold">${
+                      word.word
+                    } (<i class="fa-solid fa-microphone-lines"></i> :${
+    word.pronunciation
+  })</h2>
                 </div>
                 <div class="">
                     <h2 class="font-bold">Meaning</h2>
@@ -67,6 +88,7 @@ const displayLevelWord = (words) => {
             <h2 class="font-bangla text-4xl font-bold mt-5">নেক্সট Lesson এ যান</h2>
         </div>
         `;
+    manageSpinner(false);
     return;
   }
 
@@ -87,13 +109,15 @@ const displayLevelWord = (words) => {
                 <button onclick="loadWordDetail(${
                   word.id
                 })" class="btn bg-[#1A91ff10] hover:bg-[#1A91ff80]"><i class="fa-solid fa-circle-info"></i></button>
-                <button class="btn bg-[#1A91ff10] hover:bg-[#1A91ff80]"><i class="fa-solid fa-volume-high"></i></button>
+                <button onclick="pronounceWord('${word.word}')" class="btn bg-[#1A91ff10] hover:bg-[#1A91ff80]"><i class="fa-solid fa-volume-high"></i></button>
             </div>
         </div>
         
         `;
     wordContaner.append(card);
   });
+
+  manageSpinner(false);
 };
 
 const displaylessons = (lessons) => {
@@ -109,3 +133,20 @@ const displaylessons = (lessons) => {
 };
 
 loadlessons();
+
+document.getElementById("btn-search").addEventListener("click", () => {
+  removeActive();
+
+  const input = document.getElementById("input-search");
+  const searchValue = input.value.trim().toLowerCase();
+
+  fetch("https://openapi.programming-hero.com/api/words/all")
+    .then((res) => res.json())
+    .then((data) => {
+      const allwords = data.data;
+      const filterWords = allwords.filter((word) =>
+        word.word.toLowerCase().includes(searchValue)
+      );
+      displayLevelWord(filterWords);
+    });
+});
